@@ -1,0 +1,293 @@
+[gd_scene load_steps=32 format=3 uid="uid://c6kobln3m50a2"]
+
+[ext_resource type="Texture2D" uid="uid://v81y88d2o2dv" path="res://textures/title.png" id="1_0sco0"]
+[ext_resource type="Script" path="res://smash.gd" id="1_yl7x2"]
+[ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_q4bqr"]
+[ext_resource type="Texture2D" uid="uid://dh4qc4cpvhxh1" path="res://textures/player1.png" id="5_ayvkr"]
+[ext_resource type="Script" path="res://crt.gd" id="5_ivnl1"]
+[ext_resource type="Script" path="res://Menu_button.gd" id="6_fp81m"]
+[ext_resource type="Texture2D" uid="uid://cbc6pofk37rcj" path="res://textures/exit.png" id="6_xb71q"]
+[ext_resource type="Texture2D" uid="uid://dr4j717axadwa" path="res://textures/player/fall.png" id="7_ayut7"]
+[ext_resource type="Texture2D" uid="uid://dnppybrriqog1" path="res://textures/player/idle.png" id="8_6k7i2"]
+[ext_resource type="Texture2D" uid="uid://5aelm268rytq" path="res://textures/player/jump.png" id="9_5m7mv"]
+[ext_resource type="Texture2D" uid="uid://bh6bndsglrust" path="res://textures/player/run.png" id="10_q2vf5"]
+[ext_resource type="Script" path="res://Exit_button.gd" id="12_by6df"]
+[ext_resource type="Texture2D" uid="uid://dl3dq20g5pio0" path="res://textures/copyright.png" id="13_m8n5u"]
+[ext_resource type="AudioStream" uid="uid://c7q3w4ltksulk" path="res://sounds/smash1.wav" id="14_6444c"]
+[ext_resource type="AudioStream" uid="uid://uok2518efr8w" path="res://sounds/2021-08-17_-_8_Bit_Nostalgia_-_www.FesliyanStudios.com.mp3" id="15_tyl0s"]
+
+[sub_resource type="Environment" id="Environment_cm0p6"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 0.5
+glow_blend_mode = 0
+glow_hdr_threshold = 0.0
+glow_hdr_scale = 1.95
+glow_hdr_luminance_cap = 22.24
+
+[sub_resource type="GDScript" id="GDScript_keygg"]
+script/source = "extends Camera2D
+
+@export var decay = 0.8  # How quickly the shaking stops [0, 1].
+@export var max_offset = Vector2(100, 75)  # Maximum hor/ver shake in pixels.
+@export var max_roll = 0.1  # Maximum rotation in radians (use sparingly).
+
+@export var crt: Node
+var trauma = 0.0  # Current shake strength.
+var trauma_power = 2  # Trauma exponent. Use [2, 3].
+
+func _ready():
+	randomize()
+	#crt = get_node(\"root/lvl2/crt\")
+func add_trauma(amount):
+	trauma = min(trauma + amount, 1.0)
+
+func _process(delta):
+	if trauma:
+		trauma = max(trauma - decay * delta, 0)
+		shake()
+		
+		#crt.material.set(\"aberration\",trauma) 
+
+func shake():
+	var amount = pow(trauma, trauma_power)
+	rotation = max_roll * amount * randf_range(-1, 1)
+	offset.x = max_offset.x * amount * randf_range(-1, 1)
+	offset.y = max_offset.y * amount * randf_range(-1, 1)
+"
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_2ldnc"]
+blend_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l22rb"]
+atlas = ExtResource("7_ayut7")
+region = Rect2(0, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3vwm"]
+atlas = ExtResource("7_ayut7")
+region = Rect2(17, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pj4g2"]
+atlas = ExtResource("8_6k7i2")
+region = Rect2(0, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwgm2"]
+atlas = ExtResource("8_6k7i2")
+region = Rect2(17, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3tbf2"]
+atlas = ExtResource("8_6k7i2")
+region = Rect2(34, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rkctf"]
+atlas = ExtResource("8_6k7i2")
+region = Rect2(51, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_si0bb"]
+atlas = ExtResource("9_5m7mv")
+region = Rect2(0, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exg45"]
+atlas = ExtResource("9_5m7mv")
+region = Rect2(17, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_53f2i"]
+atlas = ExtResource("10_q2vf5")
+region = Rect2(0, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fdhdg"]
+atlas = ExtResource("10_q2vf5")
+region = Rect2(17, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sxrd4"]
+atlas = ExtResource("10_q2vf5")
+region = Rect2(34, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d25re"]
+atlas = ExtResource("10_q2vf5")
+region = Rect2(51, 0, 17, 17)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oqvhj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l22rb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p3vwm")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pj4g2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwgm2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3tbf2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkctf")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_si0bb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_exg45")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53f2i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fdhdg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sxrd4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d25re")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[node name="Main_menu" type="Control" node_paths=PackedStringArray("title", "start_button_timer", "exit_button_timer", "start_button", "exit_button", "start_sprite", "exit_sprite")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yl7x2")
+title = NodePath("VBoxContainer/CenterContainer/Title")
+start_button_timer = NodePath("VBoxContainer/VBoxContainer/Start/Timer")
+exit_button_timer = NodePath("VBoxContainer/VBoxContainer/Exit/Timer2")
+start_button = NodePath("VBoxContainer/VBoxContainer/Start")
+exit_button = NodePath("VBoxContainer/VBoxContainer/Exit")
+start_sprite = NodePath("VBoxContainer/VBoxContainer/Start/Sprite")
+exit_sprite = NodePath("VBoxContainer/VBoxContainer/Exit/Sprite")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cm0p6")
+
+[node name="crt" type="ColorRect" parent="." node_paths=PackedStringArray("camera")]
+top_level = true
+material = ExtResource("2_q4bqr")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_ivnl1")
+camera = NodePath("../Cam")
+
+[node name="Cam" type="Camera2D" parent="."]
+anchor_mode = 0
+script = SubResource("GDScript_keygg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 162)
+layout_mode = 2
+
+[node name="Title" type="TextureRect" parent="VBoxContainer/CenterContainer"]
+layout_mode = 2
+texture = ExtResource("1_0sco0")
+stretch_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+alignment = 1
+
+[node name="Start" type="TextureButton" parent="VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../Exit")
+focus_neighbor_bottom = NodePath("../Exit")
+texture_normal = ExtResource("5_ayvkr")
+stretch_mode = 3
+script = ExtResource("6_fp81m")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="VBoxContainer/VBoxContainer/Start"]
+visible = false
+material = SubResource("CanvasItemMaterial_2ldnc")
+position = Vector2(-16, 14)
+sprite_frames = SubResource("SpriteFrames_oqvhj")
+animation = &"idle"
+
+[node name="Timer" type="Timer" parent="VBoxContainer/VBoxContainer/Start"]
+wait_time = 1.5
+
+[node name="Exit" type="TextureButton" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../Start")
+focus_neighbor_bottom = NodePath("../Start")
+texture_normal = ExtResource("6_xb71q")
+script = ExtResource("12_by6df")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="VBoxContainer/VBoxContainer/Exit"]
+visible = false
+material = SubResource("CanvasItemMaterial_2ldnc")
+position = Vector2(-16, 3)
+sprite_frames = SubResource("SpriteFrames_oqvhj")
+animation = &"idle"
+
+[node name="Timer2" type="Timer" parent="VBoxContainer/VBoxContainer/Exit"]
+wait_time = 1.5
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 162)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Title" type="TextureRect" parent="VBoxContainer/VBoxContainer/CenterContainer"]
+layout_mode = 2
+texture = ExtResource("13_m8n5u")
+stretch_mode = 2
+
+[node name="Audio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_6444c")
+bus = &"Sounds"
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_tyl0s")
+autoplay = true
+
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="timeout" from="VBoxContainer/VBoxContainer/Start/Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/Exit" to="." method="_on_exit_pressed"]
+[connection signal="timeout" from="VBoxContainer/VBoxContainer/Exit/Timer2" to="." method="_on_timer_2_timeout"]

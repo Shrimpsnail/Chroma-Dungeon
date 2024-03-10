@@ -1,0 +1,12 @@
+res://level1.tscn
+res://Chromatic_manager.gd
+res://crt.gdshader
+res://crt.tres
+res://player.tscn
+res://main_menu.tscn
+res://level0.tscn
+res://level2.tscn
+res://level3.tscn
+res://cursor.gd
+res://Exit.gd
+res://export_presets.cfg

@@ -1,0 +1,14 @@
+WorldEnvironment
+Area2D
+Timer
+AudioStreamPlayer
+Control
+TextureButton
+VBoxContainer
+CenterContainer
+Camera2D
+TextureRect
+ColorRect
+Node2D
+AnimatedSprite2D
+CharacterBody2D
