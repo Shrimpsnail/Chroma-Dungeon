@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b26563l32eml2"]
+[gd_scene load_steps=23 format=3 uid="uid://b26563l32eml2"]
 
 [ext_resource type="Texture2D" uid="uid://cppa1lkkvjabm" path="res://textures/chromatic_tiles.png" id="1_c451o"]
 [ext_resource type="Script" path="res://cursor.gd" id="1_ofyf6"]
@@ -6,11 +6,14 @@
 [ext_resource type="Texture2D" uid="uid://t47rnjd1qii6" path="res://textures/dungeon_tiles.png" id="2_hyjue"]
 [ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_uve0d"]
 [ext_resource type="Texture2D" uid="uid://brngiyb2gq7yf" path="res://textures/safe_disabled.png" id="3_8hmwd"]
+[ext_resource type="Texture2D" uid="uid://d1wcqh8haogbn" path="res://textures/move.png" id="3_jlfbo"]
+[ext_resource type="Texture2D" uid="uid://dt3jvteb7og23" path="res://textures/controls.png" id="3_rtwpr"]
 [ext_resource type="Script" path="res://Exit.gd" id="7_k8add"]
 [ext_resource type="PackedScene" uid="uid://bodd8yfelcu1b" path="res://player.tscn" id="7_y36mq"]
 [ext_resource type="Script" path="res://Camera_shake.gd" id="11_1u0k2"]
 [ext_resource type="AudioStream" uid="uid://djoqym5topte" path="res://sounds/SLOWER-TEMPO2019-12-09_-_Retro_Forest_-_David_Fesliyan.mp3" id="11_626kv"]
 [ext_resource type="Script" path="res://Level_manager.gd" id="12_3qq2q"]
+[ext_resource type="Script" path="res://controls.gd" id="13_80spc"]
 
 [sub_resource type="Environment" id="Environment_nntwg"]
 background_mode = 3
@@ -159,6 +162,9 @@ sources/1 = SubResource("TileSetAtlasSource_0fawp")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8waf6"]
 size = Vector2(7, 48)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_eu3mx"]
+blend_mode = 2
+
 [node name="lvl0" type="Node2D"]
 script = ExtResource("1_ofyf6")
 
@@ -170,6 +176,10 @@ top_level = true
 material = ExtResource("2_uve0d")
 offset_right = 480.0
 offset_bottom = 261.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(377, 70)
+texture = ExtResource("3_jlfbo")
 
 [node name="Safe" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_muorx")
@@ -221,6 +231,18 @@ shape = SubResource("RectangleShape2D_8waf6")
 stream = ExtResource("11_626kv")
 autoplay = true
 bus = &"Music"
+
+[node name="controls" type="ColorRect" parent="."]
+visible = false
+material = SubResource("CanvasItemMaterial_eu3mx")
+offset_right = 480.0
+offset_bottom = 261.0
+color = Color(0.803922, 0.803922, 0.803922, 1)
+script = ExtResource("13_80spc")
+
+[node name="Sprite2D" type="Sprite2D" parent="controls"]
+position = Vector2(246, 276)
+texture = ExtResource("3_rtwpr")
 
 [connection signal="body_entered" from="Exit/Area2D" to="Exit" method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Exit/Area2D" to="Exit" method="_on_area_2d_body_exited"]

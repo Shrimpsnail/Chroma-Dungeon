@@ -1,5 +1,8 @@
-WorldEnvironment
+CollisionShape2D
 Area2D
+Node2D
+Sprite2D
+WorldEnvironment
 Timer
 AudioStreamPlayer
 Control
@@ -9,6 +12,4 @@ CenterContainer
 Camera2D
 TextureRect
 ColorRect
-Node2D
 AnimatedSprite2D
-CharacterBody2D

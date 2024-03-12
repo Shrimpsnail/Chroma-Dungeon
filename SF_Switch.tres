@@ -1,0 +1,23 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3 uid="uid://bpu0pwou0m1a8"]
+
+[ext_resource type="Texture2D" uid="uid://dpacujmojed56" path="res://textures/switch_off.png" id="1_okxwm"]
+[ext_resource type="Texture2D" uid="uid://b861qyrpr4md6" path="res://textures/switch_on.png" id="2_33ayr"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_okxwm")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_33ayr")
+}],
+"loop": true,
+"name": &"on",
+"speed": 5.0
+}]

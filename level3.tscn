@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://dupd25x7ln4qw"]
+[gd_scene load_steps=51 format=3 uid="uid://dupd25x7ln4qw"]
 
 [ext_resource type="Script" path="res://cursor.gd" id="1_o8jha"]
 [ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_trskf"]
@@ -15,8 +15,9 @@
 [ext_resource type="Texture2D" uid="uid://cjy6todmxc01a" path="res://textures/chromatic.png" id="13_7ksvt"]
 [ext_resource type="PackedScene" uid="uid://bodd8yfelcu1b" path="res://player.tscn" id="14_cfhgc"]
 [ext_resource type="Script" path="res://Camera_shake.gd" id="17_bn3qo"]
-[ext_resource type="Script" path="res://Exit.gd" id="18_qspl7"]
 [ext_resource type="Script" path="res://crate.gd" id="19_jk3po"]
+[ext_resource type="Script" path="res://controls.gd" id="19_pfgcw"]
+[ext_resource type="Texture2D" uid="uid://dt3jvteb7og23" path="res://textures/controls.png" id="20_ayhvt"]
 [ext_resource type="Texture2D" uid="uid://chh4u3t1yxtm" path="res://textures/crate.png" id="20_e3boa"]
 [ext_resource type="AudioStream" uid="uid://djoqym5topte" path="res://sounds/SLOWER-TEMPO2019-12-09_-_Retro_Forest_-_David_Fesliyan.mp3" id="21_b8xey"]
 
@@ -149,6 +150,62 @@ func _input(event):
 		
 		Globals.musicProgress  = music.get_playback_position() 
 		get_tree().reload_current_scene()
+		
+	if event.is_action_pressed(\"save\"):
+		$Audio.set_stream(load(\"res://sounds/menu_start.wav\"))
+		$Audio.playing=true
+		Globals.hasSaved  = true
+		
+		Globals.redPos = red_player.position 
+		Globals.greenPos = green_player.position 
+		Globals.bluePos = blue_player.position 
+		
+		
+		Globals.redCPos = red_crate.position 
+		Globals.greenCPos = green_crate.position 
+		Globals.blueCPos = blue_crate.position 
+		
+		Globals.counter = counter
+	
+	if event.is_action_pressed(\"load\"):
+		if Globals.hasSaved:
+			$Audio.set_stream(load(\"res://sounds/menu_change.wav\"))
+			$Audio.playing=true
+			
+			red_player.position = Globals.redPos
+			green_player.position = Globals.greenPos 
+			blue_player.position = Globals.bluePos 
+			
+			red_crate.position = Globals.redCPos
+			green_crate.position = Globals.greenCPos 
+			blue_crate.position = Globals.blueCPos 
+			
+			
+			counter = Globals.counter
+			if counter == 0:
+				red.position = Vector2(0,0)
+				blue.position = Vector2(0,0)
+				green.position = Vector2(0,0)
+				
+				redd.position = Vector2(0,0)
+				blued.position = Vector2(0,0)
+				greend.position = Vector2(0,0)
+				
+			else:
+				
+				if counter == 2:
+					red.position = -Vector2(offsetsx[counter]+16,offsetsy[counter])
+					blue.position = Vector2(offsetsx[counter]+16,offsetsy[counter])
+				else:
+					red.position = -Vector2(offsetsx[counter],offsetsy[counter])
+					blue.position = Vector2(offsetsx[counter],offsetsy[counter])
+				
+				green.position = Vector2(goffsetsx[counter],goffsetsy[counter])
+				
+				
+				redd.position = -Vector2(offsetsx[counter],offsetsy[counter])
+				blued.position = Vector2(offsetsx[counter],offsetsy[counter])
+				greend.position = Vector2(goffsetsx[counter],goffsetsy[counter])
 "
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g2wek"]
@@ -632,6 +689,58 @@ size = Vector2(1, 4)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1q3sd"]
 size = Vector2(6, 6)
 
+[sub_resource type="GDScript" id="GDScript_6wxxv"]
+script/source = "extends Node2D
+
+@export var next_level = \"level4\"
+
+@export var red_player: Node
+@export var green_player: Node
+@export var blue_player: Node
+
+@export var music: Node
+
+var red = false
+var green = false
+var blue = false
+
+	
+	
+func check():
+	
+	if(red and blue and green):
+		Globals.musicProgress  = music.get_playback_position() 
+		var next_scene = load(\"res://level4.tscn\").instantiate()
+		get_tree().root.add_child(next_scene)
+		get_tree().set_current_scene(next_scene)
+		get_node(\"/root/lvl3\").free()
+		
+
+func _on_area_2d_body_entered(body):
+	if(body == red_player):
+		red = true
+		check()
+		
+	elif(body == green_player):
+		green = true
+		check()
+		
+	elif(body == blue_player):
+		blue = true
+		check()
+
+
+func _on_area_2d_body_exited(body):
+	if(body == red_player):
+		red = false
+		
+	elif(body == green_player):
+		green = false
+		
+	elif(body == blue_player):
+		blue = false
+"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j1h6h"]
 size = Vector2(15, 48)
 
@@ -641,7 +750,10 @@ blend_mode = 1
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mra7r"]
 size = Vector2(16, 15.5)
 
-[node name="lvl2" type="Node2D"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sr647"]
+blend_mode = 2
+
+[node name="lvl3" type="Node2D"]
 script = ExtResource("1_o8jha")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -687,7 +799,7 @@ door2 = NodePath("../door2")
 [node name="Safe" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_muorx")
 format = 2
-layer_0/tile_data = PackedInt32Array(524288, 196609, 1, 589824, 196609, 1, 655360, 327681, 1, 65565, 65537, 2, 983046, 458753, 4, 1179654, 131073, 0, 1179655, 131073, 0, 1179656, 131073, 0, 1179657, 131073, 0, 1179658, 131073, 0, 1179659, 131073, 0, 1179660, 131073, 0, 1179661, 131073, 0, 1179662, 131073, 0, 1179663, 131073, 0, 1179664, 131073, 0, 1179665, 131073, 0, 1179666, 131073, 0, 1179667, 131073, 0, 1179668, 262145, 1, 983072, 131073, 0, 983071, 131073, 0, 983070, 131073, 0, 983069, 131073, 0, 983068, 131073, 0, 983067, 131073, 0, 983073, 131073, 0, 983074, 131073, 0, 720930, 131073, 2, 720929, 131073, 2, 720928, 131073, 2, 720927, 131073, 2, 720926, 131073, 2, 720925, 65537, 2, 29, 65537, 1, 852002, 262144, 1, 852000, 65537, 6, 786464, 1, 6, 917536, 131073, 6, 917534, 131073, 6, 851998, 65537, 6, 786462, 1, 6, 983044, 131073, 0, 983043, 131073, 0, 983042, 131073, 0, 983041, 131073, 0, 983040, 131073, 0, 720896, 131073, 2, 1048584, 327681, 7, 1048585, 458753, 7, 983049, 458753, 5, 983048, 327681, 5, 983063, 131073, 0, 983066, 327681, 1, 983065, 262145, 1, 1114132, 65537, 1, 1048596, 65537, 1, 983061, 131073, 0, 983062, 131073, 0, 983060, 65537, 0, 655391, 262145, 1, 589855, 65537, 1, 524319, 65537, 1, 458783, 65537, 0, 458784, 131073, 0, 393244, 196609, 2, 327708, 196609, 1, 262172, 196609, 0, 262171, 131073, 0, 393243, 327681, 0, 65566, 131073, 2, 65567, 131073, 2, 65568, 131073, 2, 65569, 262145, 0, 131105, 65537, 1, 196641, 65537, 1, 262177, 65537, 1, 327713, 65537, 1, 393249, 65537, 1, 458785, 262145, 1, 393242, 65537, 1, 524313, 458753, 3, 262170, 65537, 0, 524312, 458753, 3, 655366, 196609, 1, 720902, 327681, 2, 720903, 458753, 3, 720904, 458753, 3, 720905, 458753, 3, 720906, 458753, 3, 720907, 458753, 3, 720908, 458753, 3, 720909, 458753, 3, 720910, 458753, 3, 720911, 458753, 3, 720912, 458753, 3, 720913, 458753, 3, 720914, 458753, 3, 720915, 458753, 3, 720916, 458753, 3, 720917, 458753, 3, 720918, 262145, 2, 983064, 131073, 0, 917530, 196609, 1, 655390, 131073, 0, 655389, 65537, 0, 851994, 196609, 0, 851993, 65537, 0, 917529, 65537, 1, 524310, 393217, 3, 524311, 458753, 3, 458752, 196609, 1, 589830, 196609, 1, 524294, 196609, 1, 458758, 196609, 1, 393222, 196609, 0, 327680, 196609, 1, 262144, 196609, 1, 196608, 196609, 1, 393216, 196609, 1, 5, 196609, 1, 524314, 262145, 2, 458778, 65537, 1, 786432, 262144, 0, 851968, 262144, 1, 917504, 262144, 2, 1179653, 327681, 1, 1114117, 196609, 1, 1048581, 196609, 1, 131072, 196609, 1, 65536, 327681, 0, 65537, 131073, 2, 65538, 131073, 2, 65539, 131073, 2, 65540, 131073, 2, 65541, 196609, 2, 720897, 131073, 2, 720898, 131073, 2, 720899, 196609, 2, 655363, 196609, 0, 655362, 131073, 0, 655361, 131073, 0, 393221, 131073, 0, 393220, 131073, 0, 393219, 65537, 0, 458756, 131073, 2, 458755, 65537, 2, 458757, 262145, 0, 524293, 65537, 1, 589829, 65537, 1, 655365, 65537, 1, 720901, 65537, 2, 524315, 196609, 2, 458779, 196609, 1, 327706, 65537, 1, 196630, 65537, 2, 196631, 196609, 2, 131095, 196609, 1, 131094, 65537, 1, 65558, 65537, 1, 65559, 196609, 1, 23, 196609, 1, 22, 65537, 1, 786466, 262144, 0, 917538, 262144, 2, 589846, 393217, 4, 655382, 393217, 4, 983045, 262145, 5, -65514, 131073, 1, -131050, 131073, 1, -196586, 131073, 1, -196585, 131073, 1, -131049, 131073, 1, -65513, 131073, 1, -262121, 131073, 1, -262122, 131073, 1, -65507, 131073, 1, -131043, 131073, 1, -196579, 131073, 1, -262115, 131073, 1, -327651, 131073, 1, -65530, 131073, 1, -131066, 131073, 1, -196602, 131073, 1, -262138, 131073, 1, -327674, 131073, 1, -393210, 131073, 1, -262139, 131073, 1, -196603, 131073, 1)
+layer_0/tile_data = PackedInt32Array(524288, 196609, 1, 589824, 196609, 1, 655360, 327681, 1, 65565, 65537, 2, 983046, 458753, 4, 1179654, 131073, 0, 1179655, 131073, 0, 1179656, 131073, 0, 1179657, 131073, 0, 1179658, 131073, 0, 1179659, 131073, 0, 1179660, 131073, 0, 1179661, 131073, 0, 1179662, 131073, 0, 1179663, 131073, 0, 1179664, 131073, 0, 1179665, 131073, 0, 1179666, 131073, 0, 1179667, 131073, 0, 1179668, 262145, 1, 983072, 131073, 0, 983071, 131073, 0, 983070, 131073, 0, 983069, 131073, 0, 983068, 131073, 0, 983067, 131073, 0, 983073, 131073, 0, 983074, 131073, 0, 720930, 131073, 2, 720929, 131073, 2, 720928, 131073, 2, 720927, 131073, 2, 720926, 131073, 2, 720925, 65537, 2, 29, 65537, 1, 852002, 262144, 1, 852000, 65537, 6, 786464, 1, 6, 917536, 131073, 6, 917534, 131073, 6, 851998, 65537, 6, 786462, 1, 6, 983044, 131073, 0, 983043, 131073, 0, 983042, 131073, 0, 983041, 131073, 0, 983040, 131073, 0, 720896, 131073, 2, 1048584, 327681, 7, 1048585, 458753, 7, 983049, 458753, 5, 983048, 327681, 5, 983063, 131073, 0, 983066, 327681, 1, 983065, 262145, 1, 1114132, 65537, 1, 1048596, 65537, 1, 983061, 131073, 0, 983062, 131073, 0, 983060, 65537, 0, 655391, 262145, 1, 589855, 65537, 1, 524319, 65537, 1, 458783, 65537, 0, 458784, 131073, 0, 393244, 196609, 2, 327708, 196609, 1, 262172, 196609, 0, 262171, 131073, 0, 393243, 327681, 0, 65566, 131073, 2, 65567, 131073, 2, 65568, 131073, 2, 65569, 262145, 0, 131105, 65537, 1, 196641, 65537, 1, 262177, 65537, 1, 327713, 65537, 1, 393249, 65537, 1, 458785, 262145, 1, 393242, 65537, 1, 524313, 458753, 3, 262170, 65537, 0, 524312, 458753, 3, 655366, 196609, 1, 720902, 327681, 2, 720903, 458753, 3, 720904, 458753, 3, 720905, 458753, 3, 720906, 458753, 3, 720907, 458753, 3, 720908, 458753, 3, 720909, 458753, 3, 720910, 458753, 3, 720911, 458753, 3, 720912, 458753, 3, 720913, 458753, 3, 720914, 458753, 3, 720915, 458753, 3, 720916, 458753, 3, 720917, 458753, 3, 720918, 262145, 2, 983064, 131073, 0, 917530, 196609, 1, 655390, 131073, 0, 655389, 65537, 0, 851994, 196609, 0, 851993, 65537, 0, 917529, 65537, 1, 524310, 393217, 3, 524311, 458753, 3, 458752, 196609, 1, 589830, 196609, 1, 524294, 196609, 1, 458758, 196609, 1, 393222, 196609, 0, 327680, 196609, 1, 262144, 196609, 1, 196608, 196609, 1, 393216, 196609, 1, 5, 196609, 1, 524314, 262145, 2, 458778, 65537, 1, 786432, 262144, 0, 851968, 262144, 1, 917504, 262144, 2, 1179653, 327681, 1, 1114117, 196609, 1, 1048581, 196609, 1, 131072, 196609, 1, 65536, 327681, 0, 65537, 131073, 2, 65538, 131073, 2, 65539, 131073, 2, 65540, 131073, 2, 65541, 196609, 2, 720897, 131073, 2, 720898, 131073, 2, 720899, 196609, 2, 655363, 196609, 0, 655362, 131073, 0, 655361, 131073, 0, 393221, 131073, 0, 393220, 131073, 0, 393219, 65537, 0, 458756, 131073, 2, 458755, 65537, 2, 458757, 262145, 0, 524293, 65537, 1, 589829, 65537, 1, 655365, 65537, 1, 720901, 65537, 2, 524315, 196609, 2, 458779, 196609, 1, 327706, 65537, 1, 196630, 65537, 2, 196631, 196609, 2, 131095, 196609, 1, 131094, 65537, 1, 65558, 65537, 1, 65559, 196609, 1, 23, 196609, 1, 22, 65537, 1, 786466, 262144, 0, 917538, 262144, 2, 589846, 393217, 4, 655382, 393217, 4, 983045, 262145, 5, -65514, 131073, 1, -131050, 131073, 1, -196586, 131073, 1, -196585, 131073, 1, -131049, 131073, 1, -65513, 131073, 1, -262121, 131073, 1, -262122, 131073, 1, -65507, 131073, 1, -131043, 131073, 1, -196579, 131073, 1, -262115, 131073, 1, -327651, 131073, 1, -65530, 131073, 1, -131066, 131073, 1, -196602, 131073, 1, -262138, 131073, 1, -327674, 131073, 1, -393210, 131073, 1, -262139, 131073, 1, -196603, 131073, 1, 327707, 458753, 0)
 
 [node name="toggle1" type="StaticBody2D" parent="Safe"]
 material = SubResource("CanvasItemMaterial_js4rq")
@@ -751,7 +863,7 @@ modulate = Color(1, 0, 0, 1)
 material = SubResource("CanvasItemMaterial_xubt8")
 tile_set = SubResource("TileSet_0g7qj")
 format = 2
-layer_0/tile_data = PackedInt32Array(589837, 65539, 2, 589843, 131075, 2, 589844, 196611, 2, 589839, 196611, 2, 524308, 196611, 0, 524303, 196611, 0, 524301, 65539, 0, 524307, 131075, 0, 524302, 131075, 0, 589838, 131075, 2, 196621, 65539, 2, 131085, 65539, 0, 524306, 65539, 0, 589842, 65539, 2, 131086, 131075, 0, 196622, 131075, 2, 131087, 196611, 0, 196623, 196611, 2, 983048, 65539, 0, 1048584, 65539, 2, 983049, 196611, 0, 1048585, 196611, 2)
+layer_0/tile_data = PackedInt32Array(983048, 65539, 0, 1048584, 65539, 2, 983049, 196611, 0, 1048585, 196611, 2)
 
 [node name="green" type="TileMap" parent="disabled"]
 modulate = Color(0, 1, 0, 1)
@@ -865,9 +977,13 @@ script = ExtResource("17_bn3qo")
 decay = 2.0
 crt = NodePath("../crt")
 
-[node name="Exit" type="Node2D" parent="."]
+[node name="Exit" type="Node2D" parent="." node_paths=PackedStringArray("red_player", "green_player", "blue_player", "music")]
 position = Vector2(541, 230)
-script = ExtResource("18_qspl7")
+script = SubResource("GDScript_6wxxv")
+red_player = NodePath("../red_player")
+green_player = NodePath("../green_player")
+blue_player = NodePath("../blue_player")
+music = NodePath("../Music")
 
 [node name="Area2D" type="Area2D" parent="Exit"]
 collision_layer = 7
@@ -928,6 +1044,18 @@ shape = SubResource("RectangleShape2D_mra7r")
 stream = ExtResource("21_b8xey")
 autoplay = true
 bus = &"Music"
+
+[node name="controls" type="ColorRect" parent="."]
+visible = false
+material = SubResource("CanvasItemMaterial_sr647")
+offset_right = 624.0
+offset_bottom = 352.0
+color = Color(0.803922, 0.803922, 0.803922, 1)
+script = ExtResource("19_pfgcw")
+
+[node name="Sprite2D" type="Sprite2D" parent="controls"]
+position = Vector2(246, 276)
+texture = ExtResource("20_ayhvt")
 
 [connection signal="body_entered" from="Safe/toggle1/toggle1" to="Level_manager" method="_on_toggle_1_body_entered"]
 [connection signal="body_entered" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_entered"]

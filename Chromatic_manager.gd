@@ -75,9 +75,34 @@ func _input(event):
 			
 			red.position += Vector2(offsetsx[counter],offsetsy[counter])
 			#blue.position += Vector2(offsetsx[counter],offsetsy[counter])
-			
-					
-					
+	
 	if event.is_action_pressed("reset"):
 		Globals.musicProgress  = music.get_playback_position() 
 		get_tree().reload_current_scene()
+		
+	
+	if event.is_action_pressed("save"):
+		$Audio.set_stream(load("res://sounds/menu_start.wav"))
+		$Audio.playing=true
+		Globals.hasSaved  = true
+		
+		Globals.redPos = red_player.position 
+		Globals.greenPos = green_player.position 
+		Globals.bluePos = blue_player.position 
+		
+		Globals.counter = counter
+	
+	if event.is_action_pressed("load"):
+		if Globals.hasSaved:
+			$Audio.set_stream(load("res://sounds/menu_change.wav"))
+			$Audio.playing=true
+			
+			red_player.position = Globals.redPos
+			green_player.position = Globals.greenPos 
+			blue_player.position = Globals.bluePos 
+			
+			counter = Globals.counter
+			if counter == 0:
+				red.position = Vector2(0,0)
+			else:
+				red.position = Vector2(offsetsx[counter],offsetsy[counter])

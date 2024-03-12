@@ -30,7 +30,7 @@ func _on_toggle_1_body_entered(body):
 func _on_switch_body_entered(body):
 	if(body.is_in_group("Player")):
 		switch1.get_node("AnimatedSprite2D").play("on")
-		door1.position.x = 1200
+		door1.position.x = 1008
 		switch1_player=true
 		
 		if not switch1_crate:
@@ -40,7 +40,7 @@ func _on_switch_body_entered(body):
 	
 	if(body.is_in_group("Pushable")):
 		switch1.get_node("AnimatedSprite2D").play("on")
-		door1.position.x = 1200
+		door1.position.x = 1008
 		switch1_crate=true
 		
 		if not switch1_player:
@@ -73,7 +73,7 @@ func _on_switch_body_exited(body):
 func _on_switch_2_body_entered(body):
 	if(body.is_in_group("Player")):
 		switch2.get_node("AnimatedSprite2D").play("on")
-		door2.position.x = 1200
+		door2.position.x = 1008
 		switch2_player=true
 		
 		if not switch2_crate:
@@ -83,7 +83,7 @@ func _on_switch_2_body_entered(body):
 	
 	if(body.is_in_group("Pushable")):
 		switch2.get_node("AnimatedSprite2D").play("on")
-		door2.position.x = 1200
+		door2.position.x = 1008
 		switch2_crate=true
 		
 		if not switch2_player:

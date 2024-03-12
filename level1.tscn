@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bkyiyachym5jg"]
+[gd_scene load_steps=47 format=3 uid="uid://bkyiyachym5jg"]
 
 [ext_resource type="PackedScene" uid="uid://bodd8yfelcu1b" path="res://player.tscn" id="1_cv8wd"]
 [ext_resource type="Script" path="res://cursor.gd" id="1_v54gv"]
@@ -14,9 +14,12 @@
 [ext_resource type="Texture2D" uid="uid://d3t5cpy1j6ga5" path="res://textures/toggle_on.png" id="6_5r4co"]
 [ext_resource type="Texture2D" uid="uid://boohkrm26ufnd" path="res://textures/press.png" id="6_8a5ls"]
 [ext_resource type="Script" path="res://press.gd" id="6_fsmvy"]
+[ext_resource type="TileSet" uid="uid://bljju7nm7cl1c" path="res://TS_chromatic_blue.tres" id="8_re42p"]
 [ext_resource type="Script" path="res://Camera_shake.gd" id="9_3pcru"]
 [ext_resource type="AudioStream" uid="uid://c7q3w4ltksulk" path="res://sounds/smash1.wav" id="13_qovvm"]
 [ext_resource type="AudioStream" uid="uid://djoqym5topte" path="res://sounds/SLOWER-TEMPO2019-12-09_-_Retro_Forest_-_David_Fesliyan.mp3" id="17_x1kgr"]
+[ext_resource type="Script" path="res://controls.gd" id="19_ilmpl"]
+[ext_resource type="Texture2D" uid="uid://dt3jvteb7og23" path="res://textures/controls.png" id="20_sapiy"]
 
 [sub_resource type="Environment" id="Environment_i488n"]
 background_mode = 3
@@ -219,52 +222,6 @@ sources/1 = SubResource("TileSetAtlasSource_xrxnq")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_xubt8"]
 blend_mode = 1
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w6eyk"]
-texture = ExtResource("4_7xwse")
-0:0/0 = 0
-0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-0:0/0/physics_layer_0/angular_velocity = 0.0
-2:0/0 = 0
-2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-2:0/0/physics_layer_0/angular_velocity = 0.0
-2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-3:0/0 = 0
-3:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-3:0/0/physics_layer_0/angular_velocity = 0.0
-3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-1:1/0 = 0
-1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-1:1/0/physics_layer_0/angular_velocity = 0.0
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-3:1/0 = 0
-3:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-3:1/0/physics_layer_0/angular_velocity = 0.0
-3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-1:2/0 = 0
-1:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-1:2/0/physics_layer_0/angular_velocity = 0.0
-1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-2:2/0 = 0
-2:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-2:2/0/physics_layer_0/angular_velocity = 0.0
-2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-3:2/0 = 0
-3:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-3:2/0/physics_layer_0/angular_velocity = 0.0
-3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-1:0/0 = 0
-1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-1:0/0/physics_layer_0/angular_velocity = 0.0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-2:1/0 = 0
-2:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-2:1/0/physics_layer_0/angular_velocity = 0.0
-2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-
-[sub_resource type="TileSet" id="TileSet_0g7qj"]
-physics_layer_0/collision_layer = 1
-sources/3 = SubResource("TileSetAtlasSource_w6eyk")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_js4rq"]
 blend_mode = 1
@@ -542,6 +499,9 @@ func _on_area_2d_body_exited(body):
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j1h6h"]
 size = Vector2(7.5, 48)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vwwgm"]
+blend_mode = 2
+
 [node name="lvl1" type="Node2D"]
 script = ExtResource("1_v54gv")
 
@@ -570,9 +530,9 @@ layer_0/tile_data = PackedInt32Array(786455, 65537, 1, 720919, 65537, 1, 655383,
 [node name="red" type="TileMap" parent="."]
 modulate = Color(1, 0, 0, 1)
 material = SubResource("CanvasItemMaterial_xubt8")
-tile_set = SubResource("TileSet_0g7qj")
+tile_set = ExtResource("8_re42p")
 format = 2
-layer_0/tile_data = PackedInt32Array(458763, 131075, 0, 458764, 131075, 0, 458765, 131075, 0, 458766, 131075, 0, 458767, 131075, 0, 458768, 196611, 0, 524304, 196611, 1, 458762, 65539, 0, 524298, 65539, 1, 589834, 65539, 2, 589835, 131075, 2, 589836, 131075, 2, 589837, 131075, 2, 589838, 131075, 2, 589839, 131075, 2, 589840, 196611, 2)
+layer_0/tile_data = PackedInt32Array(458763, 131074, 0, 458764, 131074, 0, 458765, 131074, 0, 458766, 131074, 0, 458767, 131074, 0, 458768, 196610, 0, 524304, 196610, 1, 458762, 65538, 0, 524298, 65538, 1, 589834, 65538, 2, 589835, 131074, 2, 589836, 131074, 2, 589837, 131074, 2, 589838, 131074, 2, 589839, 131074, 2, 589840, 196610, 2, 524299, 65537, 1, 524300, 65537, 1, 524301, 65537, 1, 524302, 65537, 1, 524303, 65537, 1)
 
 [node name="Red Switch2" type="StaticBody2D" parent="red"]
 material = SubResource("CanvasItemMaterial_js4rq")
@@ -688,6 +648,7 @@ stream = ExtResource("13_qovvm")
 bus = &"Sounds"
 
 [node name="press" type="Node2D" parent="."]
+visible = false
 position = Vector2(233, 243)
 script = ExtResource("6_fsmvy")
 
@@ -696,7 +657,7 @@ texture = ExtResource("6_8a5ls")
 offset = Vector2(-0.48, 0)
 
 [node name="Timer" type="Timer" parent="press/Sprite2D"]
-wait_time = 15.0
+wait_time = 8.0
 one_shot = true
 autostart = true
 
@@ -720,6 +681,7 @@ bus = &"Sounds"
 [node name="Exit" type="Node2D" parent="." node_paths=PackedStringArray("red_player", "green_player", "blue_player", "music")]
 position = Vector2(456, 102)
 script = SubResource("GDScript_8lkhj")
+next_level = "level1,5"
 red_player = NodePath("../red_player")
 green_player = NodePath("../green_player")
 blue_player = NodePath("../blue_player")
@@ -737,6 +699,18 @@ shape = SubResource("RectangleShape2D_j1h6h")
 stream = ExtResource("17_x1kgr")
 autoplay = true
 bus = &"Music"
+
+[node name="controls" type="ColorRect" parent="."]
+visible = false
+material = SubResource("CanvasItemMaterial_vwwgm")
+offset_right = 480.0
+offset_bottom = 261.0
+color = Color(0.803922, 0.803922, 0.803922, 1)
+script = ExtResource("19_ilmpl")
+
+[node name="Sprite2D" type="Sprite2D" parent="controls"]
+position = Vector2(246, 276)
+texture = ExtResource("20_sapiy")
 
 [connection signal="body_entered" from="red/Red Switch2/red_switch1" to="Level_manager" method="_on_red_switch_1_body_entered"]
 [connection signal="area_entered" from="green/Green Switch/green_switch1" to="Level_manager" method="_on_green_switch_1_area_entered"]
