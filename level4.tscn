@@ -15,7 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://b861qyrpr4md6" path="res://textures/switch_on.png" id="12_xoupx"]
 [ext_resource type="PackedScene" uid="uid://bodd8yfelcu1b" path="res://player.tscn" id="14_fp8mk"]
 [ext_resource type="Script" path="res://Camera_shake.gd" id="15_hip5m"]
-[ext_resource type="Script" path="res://Exit.gd" id="16_hkpux"]
 [ext_resource type="Script" path="res://crate.gd" id="17_cj3di"]
 [ext_resource type="Texture2D" uid="uid://chh4u3t1yxtm" path="res://textures/crate.png" id="18_u4w5w"]
 [ext_resource type="AudioStream" uid="uid://djoqym5topte" path="res://sounds/SLOWER-TEMPO2019-12-09_-_Retro_Forest_-_David_Fesliyan.mp3" id="19_qftx2"]
@@ -814,6 +813,58 @@ size = Vector2(1, 4)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1q3sd"]
 size = Vector2(6, 6)
 
+[sub_resource type="GDScript" id="GDScript_lj3cf"]
+script/source = "extends Node2D
+
+@export var next_level = \"level1\"
+
+@export var red_player: Node
+@export var green_player: Node
+@export var blue_player: Node
+
+@export var music: Node
+
+var red = false
+var green = false
+var blue = false
+
+	
+	
+func check():
+	
+	if(red and blue and green):
+		Globals.musicProgress  = music.get_playback_position() 
+		var next_scene = load(\"res://level5.tscn\").instantiate()
+		get_tree().root.add_child(next_scene)
+		get_tree().set_current_scene(next_scene)
+		get_node(\"/root/lvl4\").free()
+		
+
+func _on_area_2d_body_entered(body):
+	if(body == red_player):
+		red = true
+		check()
+		
+	elif(body == green_player):
+		green = true
+		check()
+		
+	elif(body == blue_player):
+		blue = true
+		check()
+
+
+func _on_area_2d_body_exited(body):
+	if(body == red_player):
+		red = false
+		
+	elif(body == green_player):
+		green = false
+		
+	elif(body == blue_player):
+		blue = false
+"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j1h6h"]
 size = Vector2(15, 48)
 
@@ -838,7 +889,7 @@ size = Vector2(73.75, 103.5)
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ipq33"]
 blend_mode = 2
 
-[node name="lvl3" type="Node2D"]
+[node name="lvl4" type="Node2D"]
 script = ExtResource("1_sax3v")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -1051,9 +1102,13 @@ script = ExtResource("15_hip5m")
 decay = 2.0
 crt = NodePath("../crt")
 
-[node name="Exit" type="Node2D" parent="."]
+[node name="Exit" type="Node2D" parent="." node_paths=PackedStringArray("red_player", "green_player", "blue_player", "music")]
 position = Vector2(541, 262)
-script = ExtResource("16_hkpux")
+script = SubResource("GDScript_lj3cf")
+red_player = NodePath("../red_player")
+green_player = NodePath("../green_player")
+blue_player = NodePath("../blue_player")
+music = NodePath("../Music")
 
 [node name="Area2D" type="Area2D" parent="Exit"]
 collision_layer = 7

@@ -6,6 +6,11 @@ const JUMP_VELOCITY = -320.0
 
 var flipped = false
 var been_flipped = false
+
+var can_jump = true
+
+var stop = false
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -19,7 +24,7 @@ func _physics_process(delta):
 	elif velocity.y < 0:
 		$Sprite.play("jump")
 		
-	elif Input.is_action_pressed("right") or Input.is_action_pressed("left"):
+	elif (Input.is_action_pressed("right") or Input.is_action_pressed("left")) and not stop:
 		$Sprite.play("run")
 		if $step_time.time_left == 0 and is_on_floor():
 			$step_time.start()
@@ -47,7 +52,7 @@ func _physics_process(delta):
 		velocity.y += gravity * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor() and can_jump:
 		velocity.y = JUMP_VELOCITY
 		
 		$Audio.set_stream(load("res://sounds/jump.wav"))
@@ -55,16 +60,18 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction = Input.get_axis("left", "right")
-	if direction:
-		velocity.x = direction * SPEED
-		
-		if direction<0 and flipped == false:
-			flipped=true
-		if direction>0 and flipped == true:
-			flipped=false
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+	
+	if not stop:
+		var direction = Input.get_axis("left", "right")
+		if direction:
+			velocity.x = direction * SPEED
+			
+			if direction<0 and flipped == false:
+				flipped=true
+			if direction>0 and flipped == true:
+				flipped=false
+		else:
+			velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
 

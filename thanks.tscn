@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=3 uid="uid://bken182rj3hq4"]
+
+[ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_u72cr"]
+[ext_resource type="Texture2D" uid="uid://b7wq44gilirvb" path="res://textures/thanks.png" id="3_upyen"]
+[ext_resource type="AudioStream" uid="uid://ddjymb0ne4v4s" path="res://sounds/play-again-classic-arcade-game-116820.mp3" id="4_4ktje"]
+[ext_resource type="AudioStream" uid="uid://c8m1j7y0vvin" path="res://sounds/smash3.wav" id="6_xb3yy"]
+[ext_resource type="Script" path="res://Camera_shake.gd" id="9_vlqcf"]
+
+[sub_resource type="GDScript" id="GDScript_id0no"]
+script/source = "extends Node2D
+
+var leave = false
+
+func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	$sounds.play()
+
+
+func _on_timer_timeout():
+	$thanks.visible = true
+	$Music.playing = true
+	leave = true
+	
+func _input(event):
+	if (event.is_action_pressed(\"smash\") or event.is_action_pressed(\"ui_accept\")) and leave:
+		var next_scene = load(\"res://main_menu.tscn\").instantiate()
+		get_tree().root.add_child(next_scene)
+		get_tree().set_current_scene(next_scene)
+		get_node(\"/root/lvl0\").free()
+"
+
+[sub_resource type="Environment" id="Environment_nntwg"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 0.5
+glow_blend_mode = 0
+glow_hdr_threshold = 0.0
+glow_hdr_scale = 1.95
+glow_hdr_luminance_cap = 22.24
+
+[node name="lvl0" type="Node2D"]
+script = SubResource("GDScript_id0no")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_nntwg")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+top_level = true
+material = ExtResource("2_u72cr")
+offset_right = 480.0
+offset_bottom = 261.0
+
+[node name="thanks" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(255, 138)
+scale = Vector2(1.46875, 1.46875)
+texture = ExtResource("3_upyen")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+zoom = Vector2(1.2, 1.2)
+script = ExtResource("9_vlqcf")
+decay = 2.0
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_4ktje")
+bus = &"Music"
+
+[node name="sounds" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_xb3yy")
+bus = &"Music"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
