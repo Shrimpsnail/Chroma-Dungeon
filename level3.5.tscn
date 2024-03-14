@@ -1,9 +1,8 @@
-[gd_scene load_steps=45 format=3 uid="uid://c7y1rk87m3c3v"]
+[gd_scene load_steps=49 format=3 uid="uid://c7y1rk87m3c3v"]
 
 [ext_resource type="Script" path="res://cursor.gd" id="1_l3uhv"]
 [ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_sbfnc"]
 [ext_resource type="Script" path="res://crt.gd" id="3_l2bou"]
-[ext_resource type="Script" path="res://Level_manager.gd" id="4_xutc4"]
 [ext_resource type="Texture2D" uid="uid://cppa1lkkvjabm" path="res://textures/chromatic_tiles.png" id="5_saxqb"]
 [ext_resource type="Texture2D" uid="uid://t47rnjd1qii6" path="res://textures/dungeon_tiles.png" id="6_m12qv"]
 [ext_resource type="Texture2D" uid="uid://dqoa60bjujksj" path="res://textures/safe.png" id="7_eo34k"]
@@ -22,6 +21,9 @@
 [ext_resource type="AudioStream" uid="uid://djoqym5topte" path="res://sounds/SLOWER-TEMPO2019-12-09_-_Retro_Forest_-_David_Fesliyan.mp3" id="18_vulue"]
 [ext_resource type="Script" path="res://controls.gd" id="19_dv7gd"]
 [ext_resource type="Texture2D" uid="uid://dt3jvteb7og23" path="res://textures/controls.png" id="20_mj2t0"]
+[ext_resource type="Script" path="res://softlock.gd" id="23_crlui"]
+[ext_resource type="Script" path="res://cyan_crate.gd" id="24_j5pqu"]
+[ext_resource type="Texture2D" uid="uid://s42m23xks17d" path="res://textures/softlocked.png" id="24_ljb1g"]
 
 [sub_resource type="Environment" id="Environment_0wu17"]
 background_mode = 3
@@ -188,6 +190,124 @@ func _input(event):
 			blue.position = Vector2(poscyoffsetsx[counter],poscyoffsetsy[counter])
 			green.position = Vector2(poscyoffsetsx[counter],poscyoffsetsy[counter])
 				
+"
+
+[sub_resource type="GDScript" id="GDScript_xee6u"]
+script/source = "extends Node2D
+
+@export var toggle1: Node
+var toggled = false
+
+@export var switch1: Node
+var switch1_player = false
+var switch1_crate = false
+
+@export var switch2: Node
+var switch2_player = false
+var switch2_crate = false
+
+
+@export var door1: Node
+@export var door2: Node
+
+@export var disabled_tiles: Node
+
+
+func _on_toggle_1_body_entered(body):
+	if((body.is_in_group(\"Player\") or body.is_in_group(\"Pushable\")) and not toggled):
+		
+		toggle1.get_node(\"AnimatedSprite2D\").play(\"on\")
+		
+		disabled_tiles.position.x = 0
+		
+		$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+		$Audio.playing=true
+		
+		toggled = true
+
+func _on_switch_body_entered(body):
+	if(body.is_in_group(\"Player\")):
+		switch1.get_node(\"AnimatedSprite2D\").play(\"on\")
+		door1.position.x = 1008
+		switch1_player=true
+		
+		if not switch1_crate:
+			$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+			$Audio.playing=true
+		
+	
+	if(body.is_in_group(\"Pushable\")):
+		switch1.get_node(\"AnimatedSprite2D\").play(\"on\")
+		door1.position.x = 1008
+		switch1_crate=true
+		
+		if not switch1_player:
+			$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+			$Audio.playing=true
+
+
+func _on_switch_body_exited(body):
+	if body.is_in_group(\"Player\"):
+		if not switch1_crate:
+			switch1.get_node(\"AnimatedSprite2D\").play(\"default\")
+			door1.position.x = 0
+			$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+			$Audio.playing=true
+		switch1_player = false
+	
+		
+		
+	if(body.is_in_group(\"Pushable\")):
+		if not switch1_player:
+			switch1.get_node(\"AnimatedSprite2D\").play(\"default\")
+			door1.position.x = 0
+			$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+			$Audio.playing=true
+		switch1_crate = false
+
+
+
+
+func _on_switch_2_body_entered(body):
+	if(body.is_in_group(\"Player\")):
+		switch2.get_node(\"AnimatedSprite2D\").play(\"on\")
+		door2.position.x = 1008
+		switch2_player=true
+		
+		if not switch2_crate:
+			$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+			$Audio.playing=true
+		
+	
+	if(body.is_in_group(\"Pushable\")):
+		switch2.get_node(\"AnimatedSprite2D\").play(\"on\")
+		door2.position.x = 1008
+		switch2_crate=true
+		
+		if not switch2_player:
+			$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+			$Audio.playing=true
+
+
+func _on_switch_2_body_exited(body):
+	if body.is_in_group(\"Player\"):
+		if not switch2_crate:
+			switch2.get_node(\"AnimatedSprite2D\").play(\"default\")
+			door2.position.x = 0
+			$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+			$Audio.playing=true
+		switch2_player = false
+	
+		
+		
+	if(body.is_in_group(\"Pushable\")):
+		if not switch2_player:
+			switch2.get_node(\"AnimatedSprite2D\").play(\"default\")
+			door2.position.x = 0
+			$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+			$Audio.playing=true
+		switch2_crate = false
+
 "
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g2wek"]
@@ -475,25 +595,6 @@ size = Vector2(20, 10)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rbymc"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_w4qqt"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("9_2yf0l")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("10_ugtxd")
-}],
-"loop": true,
-"name": &"on",
-"speed": 5.0
-}]
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_fdqd8"]
 animations = [{
 "frames": [{
@@ -507,6 +608,25 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("12_bw4tm")
+}],
+"loop": true,
+"name": &"on",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w4qqt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_2yf0l")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_ugtxd")
 }],
 "loop": true,
 "name": &"on",
@@ -592,6 +712,9 @@ size = Vector2(16, 15.5)
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sr647"]
 blend_mode = 2
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ifi3d"]
+size = Vector2(545, 57)
+
 [node name="lvl3,5" type="Node2D"]
 script = ExtResource("1_l3uhv")
 
@@ -621,9 +744,14 @@ music = NodePath("../Music")
 
 [node name="Audio" type="AudioStreamPlayer" parent="Chromatic_manager"]
 
-[node name="Level_manager" type="Node2D" parent="." node_paths=PackedStringArray("door1")]
-script = ExtResource("4_xutc4")
+[node name="Level_manager" type="Node2D" parent="." node_paths=PackedStringArray("toggle1", "switch1", "switch2", "door1", "door2", "disabled_tiles")]
+script = SubResource("GDScript_xee6u")
+toggle1 = NodePath("../Safe/toggle1")
+switch1 = NodePath("../Safe/switch1")
+switch2 = NodePath("../Safe/switch2")
 door1 = NodePath("../door2")
+door2 = NodePath("../door1")
+disabled_tiles = NodePath("../platform")
 
 [node name="Audio" type="AudioStreamPlayer" parent="Level_manager"]
 
@@ -631,24 +759,6 @@ door1 = NodePath("../door2")
 tile_set = SubResource("TileSet_muorx")
 format = 2
 layer_0/tile_data = PackedInt32Array(524288, 327681, 1, 983072, 131073, 0, 983071, 131073, 0, 983070, 131073, 0, 983069, 131073, 0, 983073, 131073, 0, 983074, 131073, 0, 720930, 131073, 2, 720929, 131073, 2, 29, 131073, 2, 852002, 262144, 1, 852000, 65537, 6, 786464, 1, 6, 917536, 131073, 6, 917534, 131073, 6, 851998, 65537, 6, 786462, 1, 6, 983043, 131073, 0, 983042, 131073, 0, 983041, 131073, 0, 983040, 131073, 0, 720896, 131073, 2, 65569, 65537, 1, 131105, 65537, 1, 196641, 65537, 1, 262177, 65537, 1, 327713, 65537, 1, 393249, 65537, 1, 458785, 262145, 1, 458752, 196609, 1, 327680, 196609, 1, 262144, 196609, 1, 196608, 196609, 1, 393216, 196609, 1, 5, 131073, 2, 786432, 262144, 0, 851968, 262144, 1, 917504, 262144, 2, 131072, 196609, 1, 786466, 262144, 0, 917538, 262144, 2, -65514, 131073, 1, -131050, 131073, 1, -196586, 131073, 1, -196585, 131073, 1, -131049, 131073, 1, -65513, 131073, 1, -262121, 131073, 1, -262122, 131073, 1, -65507, 131073, 1, -131043, 131073, 1, -196579, 131073, 1, -262115, 131073, 1, -327651, 131073, 1, -65530, 131073, 1, -131066, 131073, 1, -196602, 131073, 1, -262138, 131073, 1, -327674, 131073, 1, -393210, 131073, 1, -262139, 131073, 1, -196603, 131073, 1, 1114123, 327681, 1, 1114124, 131073, 0, 1114125, 131073, 0, 1114126, 262145, 1, 1114134, 196609, 1, 1114138, 65537, 1, 720928, 131073, 2, 65536, 196609, 1, 0, 327681, 0, 1, 131073, 2, 2, 131073, 2, 3, 131073, 2, 4, 131073, 2, 6, 131073, 2, 7, 131073, 2, 8, 131073, 2, 9, 131073, 2, 10, 131073, 2, 11, 131073, 2, 12, 131073, 2, 13, 131073, 2, 14, 131073, 2, 15, 131073, 2, 16, 131073, 2, 17, 131073, 2, 18, 131073, 2, 19, 131073, 2, 20, 131073, 2, 21, 131073, 2, 22, 131073, 2, 23, 131073, 2, 24, 131073, 2, 25, 131073, 2, 26, 131073, 2, 27, 131073, 2, 28, 131073, 2, 30, 131073, 2, 31, 131073, 2, 32, 131073, 2, 33, 262145, 0, 458784, 131073, 0, 458783, 65537, 0, 589854, 458753, 3, 655390, 65537, 1, 720926, 65537, 2, 720927, 131073, 2, 524319, 65537, 1, 589855, 262145, 1, 589853, 393217, 3, 983068, 131073, 0, 983067, 131073, 0, 983066, 65537, 0, 1048602, 65537, 1, 1048598, 196609, 1, 983061, 131073, 0, 983062, 196609, 0, 983060, 131073, 0, 983059, 131073, 0, 983058, 131073, 0, 983057, 131073, 0, 983056, 131073, 0, 983055, 131073, 0, 983054, 65537, 0, 1048590, 65537, 1, 1048587, 196609, 1, 720904, 196609, 7, 720903, 196609, 6, 720910, 393217, 3, 720911, 458753, 3, 720912, 458753, 3, 720913, 458753, 3, 720914, 458753, 3, 720915, 262145, 2, 720916, 196609, 2, 655379, 65537, 1, 655380, 196609, 1, 524307, 65537, 1, 458772, 196609, 1, 393236, 458753, 4, 458771, 65537, 1, 393235, 458753, 3, 524308, 196609, 1, 589844, 196609, 1, 393234, 458753, 3, 393233, 458753, 3, 393232, 393217, 3, 589843, 65537, 1, 262174, 458753, 4, 262173, 458753, 3, 262172, 458753, 3, 262171, 393217, 3, 1179674, 262145, 1, 1179673, 131073, 0, 1179672, 131073, 0, 1179671, 131073, 0, 1179670, 327681, 1, 983051, 196609, 0, 983050, 131073, 0, 983049, 131073, 0, 983048, 131073, 0, 983047, 131073, 0, 983046, 131073, 0, 983045, 131073, 0, 983044, 131073, 0, 720899, 196609, 2, 655363, 196609, 1, 589827, 196609, 1, 524291, 196609, 0, 524289, 131073, 0, 720898, 131073, 2, 524290, 131073, 0, 720897, 131073, 2, 786449, 1, 6, 851985, 65537, 6, 917521, 131073, 6, 786459, 196609, 6, 786460, 196609, 7)
-
-[node name="toggle1" type="StaticBody2D" parent="Safe"]
-material = SubResource("CanvasItemMaterial_js4rq")
-position = Vector2(312, 88)
-collision_layer = 7
-collision_mask = 7
-
-[node name="toggle1" type="Area2D" parent="Safe/toggle1"]
-collision_layer = 7
-collision_mask = 7
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Safe/toggle1/toggle1"]
-position = Vector2(0, 3)
-shape = SubResource("RectangleShape2D_7ypy4")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Safe/toggle1"]
-material = SubResource("CanvasItemMaterial_rbymc")
-sprite_frames = SubResource("SpriteFrames_w4qqt")
 
 [node name="switch1" type="StaticBody2D" parent="Safe"]
 material = SubResource("CanvasItemMaterial_js4rq")
@@ -685,6 +795,24 @@ shape = SubResource("RectangleShape2D_7ypy4")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Safe/switch2"]
 material = SubResource("CanvasItemMaterial_rbymc")
 sprite_frames = SubResource("SpriteFrames_fdqd8")
+
+[node name="toggle1" type="StaticBody2D" parent="Safe"]
+material = SubResource("CanvasItemMaterial_js4rq")
+position = Vector2(312, 88)
+collision_layer = 7
+collision_mask = 7
+
+[node name="toggle1" type="Area2D" parent="Safe/toggle1"]
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Safe/toggle1/toggle1"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_7ypy4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Safe/toggle1"]
+material = SubResource("CanvasItemMaterial_rbymc")
+sprite_frames = SubResource("SpriteFrames_w4qqt")
 
 [node name="door1" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_muorx")
@@ -870,11 +998,32 @@ script = ExtResource("19_dv7gd")
 position = Vector2(246, 276)
 texture = ExtResource("20_mj2t0")
 
-[connection signal="body_entered" from="Safe/toggle1/toggle1" to="Level_manager" method="_on_toggle_1_body_entered"]
+[node name="softlock" type="Node2D" parent="."]
+visible = false
+script = ExtResource("23_crlui")
+
+[node name="Sprite2D" type="Sprite2D" parent="softlock"]
+position = Vector2(83, 48)
+texture = ExtResource("24_ljb1g")
+
+[node name="Area2D" type="Area2D" parent="softlock"]
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="softlock/Area2D"]
+position = Vector2(280.5, 258.5)
+shape = SubResource("RectangleShape2D_ifi3d")
+
+[node name="cyan" type="Node2D" parent="." node_paths=PackedStringArray("blue", "green")]
+script = ExtResource("24_j5pqu")
+blue = NodePath("../blue_player")
+green = NodePath("../green_player")
+
 [connection signal="body_entered" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_entered"]
 [connection signal="body_exited" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_exited"]
 [connection signal="body_entered" from="Safe/switch2/switch2" to="Level_manager" method="_on_switch_2_body_entered"]
 [connection signal="body_exited" from="Safe/switch2/switch2" to="Level_manager" method="_on_switch_2_body_exited"]
+[connection signal="body_entered" from="Safe/toggle1/toggle1" to="Level_manager" method="_on_toggle_1_body_entered"]
 [connection signal="body_entered" from="red_player/Push" to="red_player" method="_on_push_body_entered"]
 [connection signal="body_exited" from="red_player/Push" to="red_player" method="_on_push_body_exited"]
 [connection signal="body_entered" from="red_player/Glitch" to="red_player" method="_on_glitch_body_entered"]
@@ -886,3 +1035,4 @@ texture = ExtResource("20_mj2t0")
 [connection signal="body_entered" from="blue_player/Glitch" to="blue_player" method="_on_glitch_body_entered"]
 [connection signal="body_entered" from="Exit/Area2D" to="Exit" method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Exit/Area2D" to="Exit" method="_on_area_2d_body_exited"]
+[connection signal="body_entered" from="softlock/Area2D" to="softlock" method="_on_area_2d_body_entered"]

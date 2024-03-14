@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://dom17qsf53y6h"]
+[gd_scene load_steps=58 format=3 uid="uid://dom17qsf53y6h"]
 
 [ext_resource type="Script" path="res://cursor.gd" id="1_sax3v"]
 [ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_vhg5k"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://dt3jvteb7og23" path="res://textures/controls.png" id="20_edqrv"]
 [ext_resource type="Script" path="res://softlock.gd" id="20_xtwef"]
 [ext_resource type="Texture2D" uid="uid://s42m23xks17d" path="res://textures/softlocked.png" id="21_q77o1"]
+[ext_resource type="Script" path="res://cyan_crate.gd" id="23_xw4r8"]
 
 [sub_resource type="Environment" id="Environment_0wu17"]
 background_mode = 3
@@ -1179,6 +1180,8 @@ position = Vector2(83, 48)
 texture = ExtResource("21_q77o1")
 
 [node name="Area2D" type="Area2D" parent="softlock"]
+collision_layer = 7
+collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="softlock/Area2D"]
 position = Vector2(342.5, 276.5)
@@ -1207,6 +1210,13 @@ script = ExtResource("19_s4xhg")
 [node name="Sprite2D" type="Sprite2D" parent="controls"]
 position = Vector2(246, 276)
 texture = ExtResource("20_edqrv")
+
+[node name="cyan" type="Node2D" parent="." node_paths=PackedStringArray("blue", "green", "cblue", "cgreen")]
+script = ExtResource("23_xw4r8")
+blue = NodePath("../blue_player")
+green = NodePath("../green_player")
+cblue = NodePath("../crate/blue_crate")
+cgreen = NodePath("../crate/green_crate")
 
 [connection signal="body_entered" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_entered"]
 [connection signal="body_exited" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_exited"]

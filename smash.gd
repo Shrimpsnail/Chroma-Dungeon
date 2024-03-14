@@ -21,7 +21,7 @@ func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		get_tree().quit()
 		
-	if event.is_action_pressed("smash"):
+	if event.is_action_pressed("smash") or event.is_action_pressed("ui_accept"):
 		
 		
 		$Cam.trauma = 0.5

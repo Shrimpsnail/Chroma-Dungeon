@@ -19,3 +19,11 @@ res://dog.gd
 res://start_dog.gd
 res://thanks.tscn
 res://cursor.gd
+res://main_menu.tscn
+res://smash.gd
+res://level8.tscn
+res://Level_manager.gd
+res://softlock.gd
+res://level1,5.tscn
+res://cyan.gd
+res://cyan_crate.gd

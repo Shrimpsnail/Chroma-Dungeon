@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://y0fykop1ur5s"]
+[gd_scene load_steps=45 format=3 uid="uid://y0fykop1ur5s"]
 
 [ext_resource type="Script" path="res://cursor.gd" id="1_0oavj"]
 [ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_nis7n"]
@@ -16,6 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://djoqym5topte" path="res://sounds/SLOWER-TEMPO2019-12-09_-_Retro_Forest_-_David_Fesliyan.mp3" id="14_sqcnk"]
 [ext_resource type="Script" path="res://controls.gd" id="15_lc332"]
 [ext_resource type="Texture2D" uid="uid://dt3jvteb7og23" path="res://textures/controls.png" id="16_48nn8"]
+[ext_resource type="Script" path="res://cyan_crate.gd" id="17_fakq0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g2wek"]
 texture = ExtResource("4_5ryol")
@@ -896,6 +897,11 @@ script = ExtResource("15_lc332")
 [node name="Sprite2D" type="Sprite2D" parent="controls"]
 position = Vector2(246, 276)
 texture = ExtResource("16_48nn8")
+
+[node name="cyan" type="Node2D" parent="." node_paths=PackedStringArray("blue", "green")]
+script = ExtResource("17_fakq0")
+blue = NodePath("../blue_player")
+green = NodePath("../green_player")
 
 [connection signal="body_entered" from="Safe/toggle/toggle" to="Level_manager" method="_on_toggle_body_entered"]
 [connection signal="body_entered" from="red_player/Glitch" to="red_player" method="_on_glitch_body_entered"]

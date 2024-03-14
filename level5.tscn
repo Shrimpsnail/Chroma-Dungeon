@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://cursor.gd" id="1_uudn8"]
 [ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_weinb"]
 [ext_resource type="Script" path="res://crt.gd" id="3_fvyl6"]
-[ext_resource type="Script" path="res://Level_manager.gd" id="4_nmsx8"]
 [ext_resource type="Texture2D" uid="uid://cppa1lkkvjabm" path="res://textures/chromatic_tiles.png" id="5_b2b4v"]
 [ext_resource type="Texture2D" uid="uid://t47rnjd1qii6" path="res://textures/dungeon_tiles.png" id="6_ut4uj"]
 [ext_resource type="Texture2D" uid="uid://dqoa60bjujksj" path="res://textures/safe.png" id="7_1rn3t"]
@@ -193,6 +192,50 @@ func _input(event):
 			blue.position = Vector2(posboffsetsx[counter],posboffsetsy[counter])
 			green.position = Vector2(posgoffsetsx[counter],posgoffsetsy[counter])
 				
+"
+
+[sub_resource type="GDScript" id="GDScript_667pq"]
+script/source = "extends Node2D
+
+
+@export var toggle1: Node
+
+@export var toggle2: Node
+
+@export var toggle3: Node
+
+@export var door1: Node
+@export var door2: Node
+@export var door3: Node
+
+func _on_toggle_1_body_entered(body):
+	if body.is_in_group(\"Player\") or body.is_in_group(\"Pushable\"):
+		
+		toggle1.get_node(\"AnimatedSprite2D\").play(\"on\")
+		
+		door1.position.x = 1008
+		
+		$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+		$Audio.playing=true
+
+func _on_toggle_2_body_entered(body):
+	if body.is_in_group(\"Player\") or body.is_in_group(\"Pushable\"):
+		
+		toggle2.get_node(\"AnimatedSprite2D\").play(\"on\")
+		
+		door2.position.x = 1008
+		
+		$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+		$Audio.playing=true
+func _on_toggle_3_body_entered(body):
+	if body.is_in_group(\"Player\") or body.is_in_group(\"Pushable\"):
+		
+		toggle3.get_node(\"AnimatedSprite2D\").play(\"on\")
+		
+		door3.position.x = 1008
+		
+		$Audio.set_stream(load(\"res://sounds/switch.wav\"))
+		$Audio.playing=true
 "
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g2wek"]
@@ -535,7 +578,7 @@ func check():
 	
 	if(red and blue and green):
 		Globals.musicProgress  = music.get_playback_position() 
-		var next_scene = load(\"res://level4.tscn\").instantiate()
+		var next_scene = load(\"res://level6.tscn\").instantiate()
 		get_tree().root.add_child(next_scene)
 		get_tree().set_current_scene(next_scene)
 		get_node(\"/root/lvl3,5\").free()
@@ -608,7 +651,7 @@ music = NodePath("../Music")
 [node name="Audio" type="AudioStreamPlayer" parent="Chromatic_manager"]
 
 [node name="Level_manager" type="Node2D" parent="." node_paths=PackedStringArray("toggle1", "toggle2", "toggle3", "door1", "door2", "door3")]
-script = ExtResource("4_nmsx8")
+script = SubResource("GDScript_667pq")
 toggle1 = NodePath("../Safe/toggle1")
 toggle2 = NodePath("../Safe/toggle2")
 toggle3 = NodePath("../Safe/toggle3")
