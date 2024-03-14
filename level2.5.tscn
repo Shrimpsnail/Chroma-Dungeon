@@ -969,10 +969,12 @@ collision_mask = 7
 position = Vector2(280.5, 258.5)
 shape = SubResource("RectangleShape2D_qv5ao")
 
-[node name="cyan" type="Node2D" parent="." node_paths=PackedStringArray("blue", "green")]
+[node name="cyan" type="Node2D" parent="." node_paths=PackedStringArray("blue", "green", "cblue", "cgreen")]
 script = ExtResource("24_i108b")
 blue = NodePath("../blue_player")
 green = NodePath("../green_player")
+cblue = NodePath("../crate/blue_crate")
+cgreen = NodePath("../crate/green_crate")
 
 [connection signal="body_entered" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_entered"]
 [connection signal="body_exited" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_exited"]

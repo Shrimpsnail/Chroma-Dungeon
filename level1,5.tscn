@@ -16,7 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://djoqym5topte" path="res://sounds/SLOWER-TEMPO2019-12-09_-_Retro_Forest_-_David_Fesliyan.mp3" id="14_sqcnk"]
 [ext_resource type="Script" path="res://controls.gd" id="15_lc332"]
 [ext_resource type="Texture2D" uid="uid://dt3jvteb7og23" path="res://textures/controls.png" id="16_48nn8"]
-[ext_resource type="Script" path="res://cyan_crate.gd" id="17_fakq0"]
+[ext_resource type="Script" path="res://cyan.gd" id="17_vnx1t"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g2wek"]
 texture = ExtResource("4_5ryol")
@@ -899,7 +899,7 @@ position = Vector2(246, 276)
 texture = ExtResource("16_48nn8")
 
 [node name="cyan" type="Node2D" parent="." node_paths=PackedStringArray("blue", "green")]
-script = ExtResource("17_fakq0")
+script = ExtResource("17_vnx1t")
 blue = NodePath("../blue_player")
 green = NodePath("../green_player")
 

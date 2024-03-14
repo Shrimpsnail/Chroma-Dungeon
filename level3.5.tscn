@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://c7y1rk87m3c3v"]
+[gd_scene load_steps=51 format=3 uid="uid://c7y1rk87m3c3v"]
 
 [ext_resource type="Script" path="res://cursor.gd" id="1_l3uhv"]
 [ext_resource type="Material" uid="uid://cy3omxiw1fkx7" path="res://crt.tres" id="2_sbfnc"]
@@ -24,6 +24,8 @@
 [ext_resource type="Script" path="res://softlock.gd" id="23_crlui"]
 [ext_resource type="Script" path="res://cyan_crate.gd" id="24_j5pqu"]
 [ext_resource type="Texture2D" uid="uid://s42m23xks17d" path="res://textures/softlocked.png" id="24_ljb1g"]
+[ext_resource type="Script" path="res://press.gd" id="24_ym0rx"]
+[ext_resource type="Texture2D" uid="uid://drqumamoh260k" path="res://textures/press_Tab.png" id="25_pgjiw"]
 
 [sub_resource type="Environment" id="Environment_0wu17"]
 background_mode = 3
@@ -986,6 +988,20 @@ stream = ExtResource("18_vulue")
 autoplay = true
 bus = &"Music"
 
+[node name="press" type="Node2D" parent="."]
+position = Vector2(391, 58)
+script = ExtResource("24_ym0rx")
+
+[node name="Sprite2D" type="Sprite2D" parent="press"]
+position = Vector2(-288, -16)
+texture = ExtResource("25_pgjiw")
+offset = Vector2(-0.48, 0)
+
+[node name="Timer" type="Timer" parent="press/Sprite2D"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [node name="controls" type="ColorRect" parent="."]
 visible = false
 material = SubResource("CanvasItemMaterial_sr647")
@@ -1014,10 +1030,12 @@ collision_mask = 7
 position = Vector2(280.5, 258.5)
 shape = SubResource("RectangleShape2D_ifi3d")
 
-[node name="cyan" type="Node2D" parent="." node_paths=PackedStringArray("blue", "green")]
+[node name="cyan" type="Node2D" parent="." node_paths=PackedStringArray("blue", "green", "cblue", "cgreen")]
 script = ExtResource("24_j5pqu")
 blue = NodePath("../blue_player")
 green = NodePath("../green_player")
+cblue = NodePath("../crate/blue_crate")
+cgreen = NodePath("../crate/green_crate")
 
 [connection signal="body_entered" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_entered"]
 [connection signal="body_exited" from="Safe/switch1/switch" to="Level_manager" method="_on_switch_body_exited"]
@@ -1035,4 +1053,5 @@ green = NodePath("../green_player")
 [connection signal="body_entered" from="blue_player/Glitch" to="blue_player" method="_on_glitch_body_entered"]
 [connection signal="body_entered" from="Exit/Area2D" to="Exit" method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Exit/Area2D" to="Exit" method="_on_area_2d_body_exited"]
+[connection signal="timeout" from="press/Sprite2D/Timer" to="press" method="_on_timer_timeout"]
 [connection signal="body_entered" from="softlock/Area2D" to="softlock" method="_on_area_2d_body_entered"]
