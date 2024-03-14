@@ -989,6 +989,7 @@ autoplay = true
 bus = &"Music"
 
 [node name="press" type="Node2D" parent="."]
+visible = false
 position = Vector2(391, 58)
 script = ExtResource("24_ym0rx")
 

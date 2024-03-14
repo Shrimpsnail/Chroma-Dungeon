@@ -633,7 +633,7 @@ func check():
 	
 	if(red and blue and green):
 		Globals.musicProgress  = music.get_playback_position() 
-		var next_scene = load(\"res://level4.tscn\").instantiate()
+		var next_scene = load(\"res://level3.5.tscn\").instantiate()
 		get_tree().root.add_child(next_scene)
 		get_tree().set_current_scene(next_scene)
 		get_node(\"/root/lvl3,5\").free()
